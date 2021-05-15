@@ -31,3 +31,22 @@
 	"TTipos.h"
 	<iostream>
 
+1621091265 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\talmacen.cpp
+	<iostream>
+	"TAlmacen.h"
+	"TTipos.h"
+
+1621091265 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\include\talmacen.h
+	"TTipos.h"
+
+1621091265 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1621091265 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\ttienda.cpp
+	"TTienda.h"
+
+1621091265 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\include\ttienda.h
+	"TTipos.h"
+
