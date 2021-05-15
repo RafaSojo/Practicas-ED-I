@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1619519588 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\src\talmacen.cpp
+	<iostream>
+	"TAlmacen.h"
+	"TTipos.h"
+
+1619516792 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\include\talmacen.h
+	"TTipos.h"
+
+1618914970 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\include\ttipos.h
+	<string.h>
+	<iostream>
+	<fstream>
+
+1619380795 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\src\ttienda.cpp
+	"TTienda.h"
+
+1618914984 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\include\ttienda.h
+	"TTipos.h"
+
+1619519785 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\main.cpp
+	<iostream>
+	"TAlmacen.h"
+	"TTipos.h"
+	"TTienda.h"
+	<Windows.h>
+	<cstdio>
+	<cmath>
+
+1615911810 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 1\src\ttipos.cpp
+	"TTipos.h"
+	<iostream>
+
