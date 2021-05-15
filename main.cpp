@@ -17,10 +17,10 @@ int main()
     setvbuf(stdout, nullptr, _IOFBF, 1000);
 
     //Cadena fichero = "Almacen.dat";
-    TAlmacen *almacen;
+    TAlmacen almacen;
     TProducto producto;
 
-    TTienda *tienda = new TTienda();
+    TTienda tienda;
     TEstante estante;
 
     Cadena nombreAlmacen;
@@ -111,7 +111,9 @@ int main()
                 {
                 case 1:
                     /* Crear un almacen vacio */
-                    almacen = new TAlmacen();
+                    //almacen = new TAlmacen();
+                    if(almacen.EstaAbierto())
+                        almacen.CerrarAlmacen();
 
                     cin.ignore();
 
@@ -125,7 +127,7 @@ int main()
                     cin.getline(ficheroAlmacen, sizeof(Cadena));
 
 
-                    if(almacen->CrearAlmacen(nombreAlmacen, direccionAlmacen, ficheroAlmacen))
+                    if(almacen.CrearAlmacen(nombreAlmacen, direccionAlmacen, ficheroAlmacen))
                         cout << endl << "\tAlmacén creado correctamente." << endl;
                     else
                         cout << endl << "\tOcurrió un error al crear el almacén" << endl;
@@ -135,7 +137,7 @@ int main()
                 case 2:
                     /* Abrir un fichero de almacén. */
 
-                    almacen = new TAlmacen();
+                    //almacen = new TAlmacen();
 
                     cout << endl << "Introduzca el fichero del almacen: "<< endl << "> ";
 
@@ -143,31 +145,31 @@ int main()
 
                     cout << endl << ficheroAlmacen;
 
-                    if(!almacen->AbrirAlmacen(ficheroAlmacen))
+                    if(!almacen.AbrirAlmacen(ficheroAlmacen))
                         break;
-                    almacen->DatosAlmacen(nombreAlmacen, direccionAlmacen);
+                    almacen.DatosAlmacen(nombreAlmacen, direccionAlmacen);
 
                     break;
                 case 3:
                     /* Cerrar un almacen */
-                    almacen->CerrarAlmacen();
+                    almacen.CerrarAlmacen();
                     strcpy(nombreAlmacen, " *almacen no abierto* ");
                     break;
                 case 4:
                     /* Listar productos almacen */
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
-                        cout << endl << "Hay un total de: " << almacen->NProductos() << " productos";
+                        cout << endl << "Hay un total de: " << almacen.NProductos() << " productos";
                         cout << endl << "Lista de productos:" << endl;
                         cout << endl << "Codigo \t\tCantidad \tNombre \t\t\tPrecio \tDescripcion \tCaducidad" << endl;
 
 
                         // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
-                        for(int i=0; i<almacen->NProductos(); i++){
+                        for(int i=0; i<almacen.NProductos(); i++){
                                 //FicheProductos.read((char*)&producto, sizeof(producto));
-                                producto = almacen->ObtenerProducto(i);
+                                producto = almacen.ObtenerProducto(i);
                                 cout << producto.CodProd << "\t\t" << producto.Cantidad << "\t\t" << producto.NombreProd << "\t\t";
                                 cout << producto.Precio << "\t" << producto.Descripcion << "\t" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo  << endl;
                         }
@@ -175,7 +177,7 @@ int main()
                 case 5:
                     /* Añadir un producto */
 
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -208,7 +210,7 @@ int main()
                     cout << endl << "Introduce la cantidad del producto > ";
                     cin >> producto.Cantidad;
 
-                    if(almacen->AnadirProducto(producto))
+                    if(almacen.AnadirProducto(producto))
                         cout << endl << "Se añadió correctamente." << endl;
                     else
                         cout << endl << "Ocurrió un error. Es posible que el producto ya exista." << endl;
@@ -217,7 +219,7 @@ int main()
                 case 6:
                     /* Actualizar un producto */
 
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -225,14 +227,14 @@ int main()
                     cout << endl << "Introduce el código del producto >> ";
                     cin >> codigoProducto;
 
-                    posicionProducto = almacen->BuscarProducto(codigoProducto);
+                    posicionProducto = almacen.BuscarProducto(codigoProducto);
 
                     if(posicionProducto == -1){
                         cout << endl << "El código introducido no coincide con ningún producto";
                         break;
                     }
 
-                    producto = almacen->ObtenerProducto(posicionProducto);
+                    producto = almacen.ObtenerProducto(posicionProducto);
 
                     cout << endl << "Indica qué es lo que quieres cambiar";
                     cout << endl << "(introduce \"n\" para no modificarlo y \"s\" para sí modificarlo)";
@@ -284,7 +286,7 @@ int main()
                         producto.Caducicidad = fecha;
                     }
 
-                    if(almacen->ActualizarProducto(posicionProducto, producto))
+                    if(almacen.ActualizarProducto(posicionProducto, producto))
                         cout << endl << "Producto modificado correctamente";
                     else
                         cout << endl << "Ocurrió un error";
@@ -294,7 +296,7 @@ int main()
                 case 7:
                     /* Consultar un producto */
 
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -302,13 +304,13 @@ int main()
                     cout << endl << "Introduce el código del producto >> ";
                     cin >> codigoProducto;
 
-                    posicionProducto = almacen->BuscarProducto(codigoProducto);
+                    posicionProducto = almacen.BuscarProducto(codigoProducto);
 
                     if(posicionProducto == -1){
                         cout << endl << "El código introducido no coincide con ningún producto";
                         break;
                     }
-                    producto = almacen->ObtenerProducto(posicionProducto);
+                    producto = almacen.ObtenerProducto(posicionProducto);
 
                     cout << endl << "El producto tiene los siguientes datos:";
                     cout << endl << "\tCódigo: " << producto.CodProd;
@@ -323,7 +325,7 @@ int main()
                 case 8:
                     /* Eliminar un producto */
 
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -331,14 +333,14 @@ int main()
                     cout << endl << "Introduce el código del producto >> ";
                     cin >> codigoProducto;
 
-                    posicionProducto = almacen->BuscarProducto(codigoProducto);
+                    posicionProducto = almacen.BuscarProducto(codigoProducto);
 
                     if(posicionProducto == -1){
                         cout << endl << "El código introducido no coincide con ningún producto";
                         break;
                     }
 
-                    almacen->EliminarProducto(posicionProducto);
+                    almacen.EliminarProducto(posicionProducto);
 
                     break;
                 case 0:
@@ -374,7 +376,7 @@ int main()
                 {
                 case 1:
                     /* Crear una tienda vacía */
-                    tienda = new TTienda();
+                    //tienda = new TTienda();
 
                     cin.ignore();
                     cout << endl << "\tIntroduce el nombre de la tienda > ";
@@ -386,7 +388,7 @@ int main()
                     cout << endl << "\tIntroduce el fichero de la tienda > ";
                     cin.getline(ficheroTienda, sizeof(Cadena));
 
-                    if(tienda->CrearTienda(nombreTienda, direccionTienda, ficheroTienda))
+                    if(tienda.CrearTienda(nombreTienda, direccionTienda, ficheroTienda))
                         cout << endl << "\tTienda creada correctamente." << endl;
                     else
                         cout << endl << "\tOcurrió un error." << endl;
@@ -394,30 +396,30 @@ int main()
                     break;
                 case 2:
                     /* Abrir un fichero tienda */
-                    tienda = new TTienda();
+                    //tienda = new TTienda();
 
                     cout << endl << "Introduzca el fichero de la tienda: "<< endl << "> ";
 
                     cin >> ficheroTienda;
 
-                    tienda->AbrirTienda(ficheroTienda);
+                    tienda.AbrirTienda(ficheroTienda);
 
-                    tienda->DatosTienda(nombreTienda, direccionTienda);
+                    tienda.DatosTienda(nombreTienda, direccionTienda);
                     break;
                 case 3:
                     /* Cerrar la tienda */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
 
-                    if(tienda->CerrarTienda())
+                    if(tienda.CerrarTienda())
                         cout << endl << "Tienda cerrada correctamente.";
                     else
                         cout << endl << "Ocurrió un error al cerrar la tienda";
 
-                    delete tienda;
-                    tienda = new TTienda();
+                    //delete tienda;
+                    //tienda = new TTienda();
 
                     strcpy(nombreTienda, " *tienda no abierta*");
 
@@ -425,29 +427,29 @@ int main()
 
                 case 4:
                     /* Actualizar el fichero tienda */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
-                    tienda->GuardarTienda();
+                    tienda.GuardarTienda();
                     break;
 
                 case 5:
                     /* Listar productos de la tienda */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
 
-                    cout << endl << "Hay un total de: " << tienda->NoEstantes() << " estantes";
+                    cout << endl << "Hay un total de: " << tienda.NoEstantes() << " estantes";
                     cout << endl << "Lista de Estantes:" << endl;
                     cout << endl << "Codigo \t\tCod. Producto \tCapacidad \tNº Productos \tPosición" << endl;
 
 
                     // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
-                    for(int i=0; i < tienda->NoEstantes(); i++){
+                    for(int i=0; i < tienda.NoEstantes(); i++){
                             //FicheProductos.read((char*)&producto, sizeof(producto));
-                            estante = tienda->ObtenerEstante(i);
+                            estante = tienda.ObtenerEstante(i);
                             cout << estante.CodEstante << "\t\t" << estante.CodProd << "\t\t" << estante.Capacidad << "\t\t";
                             cout << estante.NoProductos << "\t\t" << estante.Posicion << endl;
                     }
@@ -455,11 +457,11 @@ int main()
                     break;
                 case 6:
                     /* Añadir un estante */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -467,7 +469,7 @@ int main()
                     cout << endl << "\tIntroduce el código del estante > ";
                     cin >> estante.CodEstante;
 
-                    if(tienda->BuscarEstante(estante.CodEstante) != -1){
+                    if(tienda.BuscarEstante(estante.CodEstante) != -1){
                         cout << endl << "El código de estante ya existe.";
                         cout << endl << "Abortando creación de estante...";
                         break;
@@ -476,7 +478,7 @@ int main()
                     cout << endl << "\tIntroduce el código del producto > ";
                     cin >> estante.CodProd;
 
-                    posicionProducto = almacen->BuscarProducto(estante.CodProd);
+                    posicionProducto = almacen.BuscarProducto(estante.CodProd);
                     if(posicionProducto == -1){
                         cout << endl << "No existe ningún producto con ese código.";
                         cout << endl << "Abortando creación de estante...";
@@ -484,7 +486,7 @@ int main()
                     }
 
 
-                    producto = almacen->ObtenerProducto(posicionProducto);
+                    producto = almacen.ObtenerProducto(posicionProducto);
 
                     cout << endl << "\tIntroduce la capacidad > ";
                     cin >> estante.Capacidad;
@@ -512,9 +514,9 @@ int main()
                         producto.Cantidad = producto.Cantidad - estante.NoProductos;
                     }
 
-                    almacen->ActualizarProducto(posicionProducto, producto);
+                    almacen.ActualizarProducto(posicionProducto, producto);
 
-                    if(tienda->AnadirEstante(estante))
+                    if(tienda.AnadirEstante(estante))
                         cout << endl << "\tEstante añadido exitosamente.";
                     else
                         cout << endl << "\tOcurrió un error al añadir el estante.";
@@ -522,11 +524,11 @@ int main()
                     break;
                 case 7:
                     /* Actualizar un estante */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -535,11 +537,11 @@ int main()
                     cout << endl << "\tIntroduce el código de estante > ";
                     cin >> codigoEstante;
 
-                    posicionEstante = tienda->BuscarEstante(codigoEstante);
+                    posicionEstante = tienda.BuscarEstante(codigoEstante);
                     if(posicionEstante == -1){
                         cout << endl << "\tEl código introducido no se corresponde con ningún estante";
                     }else{
-                        estante = tienda->ObtenerEstante(posicionEstante);
+                        estante = tienda.ObtenerEstante(posicionEstante);
 
 
                         cout << endl << "\tEn el estante actualmente hay " << estante.NoProductos << "/" << estante.Capacidad;
@@ -552,7 +554,7 @@ int main()
                         }
                         // mostrar por pantalla el numero de productos que hay en el estante y pedir confirmación
 
-                        posicionProducto = almacen->BuscarProducto(estante.CodProd);
+                        posicionProducto = almacen.BuscarProducto(estante.CodProd);
 
                         if(posicionProducto == -1){
                             cout << endl << "\tEl producto con código " << estante.CodProd << " no existe en el almacén";
@@ -561,16 +563,16 @@ int main()
                             cout << endl << "\tIntroduce la cantidad a reponer > ";
                             cin >> cantidadProducto;
 
-                            producto = almacen->ObtenerProducto(posicionProducto);
+                            producto = almacen.ObtenerProducto(posicionProducto);
 
                             if(cantidadProducto < estante.NoProductos){
                                 // Mueve la cantidad al almacen
 
                                 producto.Cantidad += estante.NoProductos - cantidadProducto;
-                                almacen->ActualizarProducto(posicionProducto, producto);
+                                almacen.ActualizarProducto(posicionProducto, producto);
 
                                 estante.NoProductos -= cantidadProducto;
-                                tienda->ActualizarEstante(posicionEstante, estante);
+                                tienda.ActualizarEstante(posicionEstante, estante);
 
                                 cout << endl << "\tSe ha quitado " << cantidadProducto << " productos para ponerlos en el almacén";
 
@@ -600,8 +602,8 @@ int main()
                                 producto.Cantidad -= cantidadProducto;
                                 estante.NoProductos += cantidadProducto;
 
-                                almacen->ActualizarProducto(posicionProducto, producto);
-                                tienda->ActualizarEstante(posicionEstante, estante);
+                                almacen.ActualizarProducto(posicionProducto, producto);
+                                tienda.ActualizarEstante(posicionEstante, estante);
 
                                 cout << endl << "\tSe ha repuesto " << cantidadProducto << " productos";
 
@@ -614,7 +616,7 @@ int main()
                     break;
                 case 8:
                     /* Consultar un estante */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
@@ -622,11 +624,11 @@ int main()
                     cout << endl << "\tIntroduce el código de estante > ";
                     cin >> codigoEstante;
 
-                    posicionEstante = tienda->BuscarEstante(codigoEstante);
+                    posicionEstante = tienda.BuscarEstante(codigoEstante);
                     if(posicionEstante == -1){
                         cout << endl << "\tEl código introducido no se corresponde con ningún estante";
                     }else{
-                        estante = tienda->ObtenerEstante(posicionEstante);
+                        estante = tienda.ObtenerEstante(posicionEstante);
                         cout << endl << "\tDatos del estante: ";
                         cout << endl << "\t\tCódigo estante: " << estante.CodEstante;
                         cout << endl << "\t\tCódigo producto: " << estante.CodProd;
@@ -638,11 +640,11 @@ int main()
                     break;
                 case 9:
                     /* Eliminar un estante */
-                    if(!tienda->EstaAbierta()){
+                    if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                     }
-                    if(!almacen->EstaAbierto()){
+                    if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
@@ -650,22 +652,22 @@ int main()
                     cout << endl << "\tIntroduce el código de estante > ";
                     cin >> codigoEstante;
 
-                    posicionEstante = tienda->BuscarEstante(codigoEstante);
+                    posicionEstante = tienda.BuscarEstante(codigoEstante);
                     if(posicionEstante == -1){
                         cout << endl << "\tEl código introducido no se corresponde con ningún estante";
                     }else{
-                        estante = tienda->ObtenerEstante(posicionEstante);
-                        posicionProducto = almacen->BuscarProducto(estante.CodProd);
+                        estante = tienda.ObtenerEstante(posicionEstante);
+                        posicionProducto = almacen.BuscarProducto(estante.CodProd);
 
-                        if(posicionProducto = -1){
+                        if(posicionProducto == -1){
                             cout << endl << "\tEl producto que se va a eliminar no está en el almacén, por lo tanto se desechará sin guardarlo.";
                         }else{
-                            producto = almacen->ObtenerProducto(posicionProducto);
+                            producto = almacen.ObtenerProducto(posicionProducto);
                             producto.Cantidad += estante.NoProductos;
-                            almacen->ActualizarProducto(posicionProducto, producto);
+                            almacen.ActualizarProducto(posicionProducto, producto);
                         }
 
-                        if(tienda->EliminarEstante(posicionEstante))
+                        if(tienda.EliminarEstante(posicionEstante))
                             cout << endl << "\tEstante eliminado correctamente.";
                         else
                             cout << endl << "\tOcurrió un error.";
@@ -685,29 +687,29 @@ int main()
             break;
         case 3:
             /* Reponer productos en tienda */
-                if(!tienda->EstaAbierta()){
+                if(!tienda.EstaAbierta()){
                         cout << endl << "No hay ninguna tienda abierta" << endl;
                         break;
                 }
-                if(!almacen->EstaAbierto()){
+                if(!almacen.EstaAbierto()){
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                 }
 
-                for(int i=0; i<tienda->NoEstantes(); i++){
-                    estante = tienda->ObtenerEstante(i);
+                for(int i=0; i < tienda.NoEstantes(); i++){
+                    estante = tienda.ObtenerEstante(i);
 
-                    posicionProducto = almacen->BuscarProducto(estante.CodProd);
+                    posicionProducto = almacen.BuscarProducto(estante.CodProd);
 
                     cout << endl << "\tCódigo estante: " << estante.CodEstante;
                     cout << endl << "\tCapacidad: " << estante.Capacidad;
 
 
                     if(posicionProducto != -1){
-                            producto = almacen->ObtenerProducto(posicionProducto);
+                            producto = almacen.ObtenerProducto(posicionProducto);
                             cout << endl << "\tProducto: " << producto.NombreProd;
 
-                            switch(tienda->ReponerEstante(i, producto)){
+                            switch(tienda.ReponerEstante(i, producto)){
                             case 0:
                                 cout << endl << "\tError. Posición de producto incorrecta.";
                                 break;
@@ -725,7 +727,7 @@ int main()
                                 break;
 
                             }
-                            almacen->ActualizarProducto(posicionProducto, producto);
+                            almacen.ActualizarProducto(posicionProducto, producto);
 
                     }else{
                         cout << endl << "\tEl producto no está en el almacen.";
