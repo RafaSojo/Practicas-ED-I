@@ -28,4 +28,12 @@ struct TEstante
  Cadena CodProd; //Código del producto que contiene el estante.
  int NoProductos; //Número de productos que hay en el estante.
 };
+
+struct TPedido
+{
+ Cadena CodProd; //Nombre del producto pedido
+ int CantidadPed; //Cantidad pedida del producto
+ Cadena Nomtienda; //Nombre del fichero tienda
+};
+
 #endif // TTIPOS_H
