@@ -10,7 +10,106 @@
 
 #include <cmath>
 
+/*
+    cola -> FIFO (pedidos)
+    lista -> ??? (envios)
+
+*/
+
 using namespace std;
+
+
+// Funciones
+void mostrarCabeceraPrincipal(Cadena nombreAlmacen, Cadena nombreTienda);
+void motrarCabeceraAlmacen(Cadena nombreAlmacen);
+void mostrarCabeceraTienda(Cadena nombreTienda);
+void mostrarCabeceraPedidos();
+void mostrarCabeceraEnvios();
+
+void mostrarCabeceraPrincipal(Cadena nombreAlmacen, Cadena nombreTienda){
+
+    cout << "----- Menú Principal ----- ";
+    cout << nombreAlmacen << ", "<< nombreTienda << endl;
+
+    cout << endl << "1.- Gestión del Almacenes.";
+    cout << endl << "2.- Gestión de la Tienda.";
+    cout << endl << "3.- Reposición de Productos en Tienda.";
+    cout << endl << "0.- Salir";
+    cout << endl << "> ";
+
+}
+
+void mostrarCabeceraAlmacen(Cadena nombreAlmacen){
+
+    cout << endl << "----- Menú Almacenes ----- ";
+    cout << nombreAlmacen << endl;
+
+    cout << endl << "1.- Crear un almacén vacío.";
+    cout << endl << "2.- Abrir un fichero de almacén.";
+    cout << endl << "3.- Cerrar un almacén.";
+    cout << endl << "4.- Listar productos del almacén.";
+    cout << endl << "5.- Añadir un producto.";
+    cout << endl << "6.- Actualizar un producto.";
+    cout << endl << "7.- Consultar un producto.";
+    cout << endl << "8.- Eliminar un producto.";
+    cout << endl << "*9.- Gestión de pedidos.";
+    cout << endl << "*10.- Gestión de envios.";
+    cout << endl << "0.- Salir";
+    cout << endl << "> ";
+
+}
+
+void mostrarCabeceraTienda(Cadena nombreTienda){
+
+    cout << endl << endl << endl << "----- Menú Tienda ----- ";
+    cout << nombreTienda << endl;
+
+    cout << endl << "1.- Crear una tienda vacía.";
+    cout << endl << "2.- Abrir un ficher o tienda.";
+    cout << endl << "3.- Cerrar la tienda.";
+    cout << endl << "4.- Actualizar el fichero tienda.";
+    cout << endl << "5.- Listar productos de la tienda.";
+    cout << endl << "6.- Añadir un estante.";
+    cout << endl << "7.- Actualizar un estante.";
+    cout << endl << "8.- Consultar un estante.";
+    cout << endl << "9.- Eliminar un estante.";
+    cout << endl << "0.- Salir";
+    cout << endl << "> ";
+
+}
+
+void mostrarCabeceraPedidos(){
+
+    cout << endl << endl << endl << "----- Gestión de Pedidos ----- ";
+
+    cout << endl << "1.- Cargar pedidos de fichero.";
+    cout << endl << "2.- Añadir pedido.";
+    cout << endl << "3.- Atender pedidos.";
+    cout << endl << "4.- Listar pedidos completos de todos los productos.";
+    cout << endl << "5.- Lista pedidos de un producto.";
+    cout << endl << "6.- Listar todas las cantidades pendientes.";
+    cout << endl << "7.- Lista cantidades pendientes de un producto.";
+    cout << endl << "8.- Guardar pedidos a fichero.";
+    cout << endl << "0.- Salir";
+    cout << endl << "> ";
+
+}
+
+void mostrarCabeceraEnvios(){
+
+    cout << endl << endl << endl << "----- Gestión de Envíos ----- ";
+
+    cout << endl << "1.- Cargar envíos de fichero.";
+    cout << endl << "2.- Insertar un nuevo envío.";
+    cout << endl << "3.- Reparto de envíos a tienda.";
+    cout << endl << "4.- Listar todos ols envíos.";
+    cout << endl << "5.- Listar los envíos a una tienda.";
+    cout << endl << "6.- Guardar envíos a fichero.";
+    cout << endl << "0.- Salir";
+    cout << endl << "> ";
+
+}
+
 
 int main()
 {
@@ -60,33 +159,9 @@ int main()
     int opcion_submenu;
     int opcion_subsubmenu;
 
-
-    /*
-    cout << "  ____                                               " << endl;
-    cout << " |  _ \\       _                                      "<< endl;
-    cout << " | |_) |_   _(_)                                     "<< endl;
-    cout << " |  _ <| | | |                                       "<< endl;
-    cout << " | |_) | |_| |_                                      "<< endl;
-    cout << " |____/ \\__, (_)_           _    _____       _       "<< endl;
-    cout << " |  __ \\ __/ |/ _|         | |  / ____|     (_)      "<< endl;
-    cout << " | |__) |___/| |_ __ _  ___| | | (___   ___  _  ___  "<< endl;
-    cout << " |  _  // _` |  _/ _` |/ _ \\ |  \\___ \\ / _ \\| |/ _ \\ "<< endl;
-    cout << " | | \\ \\ (_| | || (_| |  __/ |  ____) | (_) | | (_) |"<< endl;
-    cout << " |_|  \\_\\__,_|_| \\__,_|\___|_| |_____/ \\___/| |\\___/ "<< endl;
-    cout << "                                           _/ |      "<< endl;
-    cout << "                                          |__/       "<< endl;
-    */
-
     do
     {
-        cout << "----- Menú Principal ----- ";
-        cout << nombreAlmacen << ", "<< nombreTienda << endl;
-
-        cout << endl << "1.- Gestión del Almacenes.";
-        cout << endl << "2.- Gestión de la Tienda.";
-        cout << endl << "3.- Reposición de Productos en Tienda.";
-        cout << endl << "0.- Salir";
-        cout << endl << "> ";
+        mostrarCabeceraPrincipal(nombreAlmacen, nombreTienda);
         cin >> opcion_menu;
 
         switch(opcion_menu)
@@ -96,27 +171,12 @@ int main()
             /* Menu almacenes*/
             do
             {
-                cout << endl << "----- Menú Almacenes ----- ";
-                cout << nombreAlmacen << endl;
-
-                cout << endl << "1.- Crear un almacén vacío.";
-                cout << endl << "2.- Abrir un fichero de almacén.";
-                cout << endl << "3.- Cerrar un almacén.";
-                cout << endl << "4.- Listar productos del almacén.";
-                cout << endl << "5.- Añadir un producto.";
-                cout << endl << "6.- Actualizar un producto.";
-                cout << endl << "7.- Consultar un producto.";
-                cout << endl << "8.- Eliminar un producto.";
-                cout << endl << "*9.- Gestión de pedidos.";
-                cout << endl << "*10.- Gestión de envios.";
-                cout << endl << "0.- Salir";
-                cout << endl << "> ";
+                mostrarCabeceraAlmacen(nombreAlmacen);
                 cin >> opcion_submenu;
                 switch(opcion_submenu)
                 {
                 case 1:
                     /* Crear un almacen vacio */
-                    //almacen = new TAlmacen();
                     if(almacen.EstaAbierto())
                         almacen.CerrarAlmacen();
 
@@ -139,10 +199,9 @@ int main()
 
 
                     break;
+
                 case 2:
                     /* Abrir un fichero de almacén. */
-
-                    //almacen = new TAlmacen();
 
                     cout << endl << "Introduzca el fichero del almacen: "<< endl << "> ";
 
@@ -155,11 +214,13 @@ int main()
                     almacen.DatosAlmacen(nombreAlmacen, direccionAlmacen);
 
                     break;
+
                 case 3:
                     /* Cerrar un almacen */
                     almacen.CerrarAlmacen();
                     strcpy(nombreAlmacen, " *almacen no abierto* ");
                     break;
+
                 case 4:
                     /* Listar productos almacen */
                     if(!almacen.EstaAbierto()){
@@ -173,7 +234,6 @@ int main()
 
                         // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
                         for(int i=0; i<almacen.NProductos(); i++){
-                                //FicheProductos.read((char*)&producto, sizeof(producto));
                                 producto = almacen.ObtenerProducto(i);
                                 cout << producto.CodProd << "\t\t" << producto.Cantidad << "\t\t" << producto.NombreProd << "\t\t";
                                 cout << producto.Precio << "\t" << producto.Descripcion << "\t" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo  << endl;
@@ -351,11 +411,109 @@ int main()
 
                 case 9:
                     /* Gestión de pedidos */
+
+                    do{
+                        mostrarCabeceraPedidos();
+
+                        cin >> opcion_subsubmenu;
+                        switch(opcion_subsubmenu)
+                        {
+                            case 1:
+                                /* Cargar pedidos de fichero */
+
+                                break;
+
+                            case 2:
+                                /* Añadir pedido */
+
+                                break;
+
+                            case 3:
+                                /* Atender pedidos */
+
+                                break;
+
+                            case 4:
+                                /* Listar pedidos completos de todos los productos */
+
+                                break;
+
+                            case 5:
+                                /* Listar pedidos de un producto */
+
+                                break;
+
+                            case 6:
+                                /* Listar todas las cantidades pendientes */
+
+                                break;
+
+                            case 7:
+                                /* Listar cantidades pendientes de un producto */
+
+                                break;
+
+                            case 8:
+                                /* Guardar pedidos a fichero */
+
+                                break;
+
+
+                            case 0:
+                                break;
+                            default:
+                                cout << endl << "No se ha seleccionado ninguna opción válida" << endl << endl;
+                        }
+
+                    }while(opcion_subsubmenu != 0);
+
                     break;
 
 
                 case 10:
                     /* Gestión de envíos */
+                    do{
+                        mostrarCabeceraEnvios();
+                        cin >> opcion_subsubmenu;
+                        switch(opcion_subsubmenu)
+                        {
+                            case 1:
+                                /* Cargar envios de fichero */
+
+                                break;
+
+                            case 2:
+                                /* Insertar un nuevo envio */
+
+                                break;
+
+                            case 3:
+                                /* Reparto de envíos a tienda */
+
+                                break;
+
+                            case 4:
+                                /* Listar todos los envíos */
+
+                                break;
+
+                            case 5:
+                                /* Listar los envíos a una tienda */
+
+                                break;
+
+                            case 6:
+                                /* Guardar envios a fichero */
+
+                                break;
+
+                            case 0:
+                                break;
+                            default:
+                                cout << endl << "No se ha seleccionado ninguna opción válida" << endl << endl;
+                        }
+
+                    }while(opcion_subsubmenu != 0);
 
                     break;
 
@@ -373,20 +531,8 @@ int main()
             /* Menú Tienda */
             do
             {
-                cout << endl << endl << endl << "----- Menú Tienda ----- ";
-                cout << nombreTienda << endl;
 
-                cout << endl << "1.- Crear una tienda vacía.";
-                cout << endl << "2.- Abrir un ficher o tienda.";
-                cout << endl << "3.- Cerrar la tienda.";
-                cout << endl << "4.- Actualizar el fichero tienda.";
-                cout << endl << "5.- Listar productos de la tienda.";
-                cout << endl << "6.- Añadir un estante.";
-                cout << endl << "7.- Actualizar un estante.";
-                cout << endl << "8.- Consultar un estante.";
-                cout << endl << "9.- Eliminar un estante.";
-                cout << endl << "0.- Salir";
-                cout << endl << "> ";
+                mostrarCabeceraTienda(nombreTienda);
                 cin >> opcion_submenu;
                 switch(opcion_submenu)
                 {

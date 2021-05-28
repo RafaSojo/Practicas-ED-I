@@ -79,8 +79,8 @@ TProducto TAlmacen::ObtenerProducto(int pPos){
         return producto;
     }
 
-    int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(producto) * pPos) ;
-    FicheProductos.seekg(offset);
+    int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(producto) * pPos);
+    FicheProductos.seekg(offset, ios::beg);
     FicheProductos.read((char*)&producto, sizeof(producto));
 
     return producto;
@@ -131,12 +131,12 @@ TProducto TAlmacen::ObtenerProducto(int pPos){
 
     // Añadimos al fichero el producto
     int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(TProducto) * NProduc) ;
-    FicheProductos.seekp(offset);
+    FicheProductos.seekp(offset, ios::beg);
     FicheProductos.write((char*) &pProduc, sizeof(TProducto));
 
     // Actualizo número de productos
     NProduc++;
-    FicheProductos.seekp(0);
+    FicheProductos.seekp(0, ios::beg);
     FicheProductos.write((char*)&NProduc, sizeof(NProduc));
 
 
@@ -164,7 +164,7 @@ bool TAlmacen::ActualizarProducto(int pPos, TProducto pProduc){
         return false;
 
     int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(TProducto) * pPos) ;
-    FicheProductos.seekp(offset);
+    FicheProductos.seekp(offset, ios::beg);
     FicheProductos.write((char*) &pProduc, sizeof(TProducto));
 
     return true;

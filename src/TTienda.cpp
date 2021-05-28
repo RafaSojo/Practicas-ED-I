@@ -19,19 +19,19 @@ TTienda::TTienda()
 TTienda::~TTienda()
 {
     CerrarTienda();
-    delete Estantes;
 }
 
 
-//Devuelve los atributos nombre y dirección por parámetro.
+// Devuelve los atributos nombre y dirección por parámetro.
 void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
     strcpy(pNombTienda, Nombre);
     strcpy(pDirTienda, Direccion);
 }
 
-
-
-
+// Devuelve el atributo del nombre del fichero de la tienda
+void TTienda::NombreFicheroTienda(Cadena NomF){
+    strcpy(NomF, NomFiche);
+}
 
 //Abre un fichero y lo carga a memoria. Si ya había un fichero previamente cargado, guardará los datos
 //de la tienda y procederá a cargar el nuevo fichero. Si el fichero es el mismo que el que está en
@@ -39,9 +39,10 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
 //si se ha podido cargar el fichero.
  bool TTienda::AbrirTienda(Cadena pNomFiche){
 
-    if(EstaAbierta())
+    if(EstaAbierta()){
         GuardarTienda();
-
+        delete Estantes;
+    }
 
     strcpy(NomFiche, pNomFiche);
 
@@ -53,20 +54,15 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
     FicheroTienda.read((char*)&Nombre, sizeof(Cadena));
     FicheroTienda.read((char*)&Direccion, sizeof(Cadena));
 
-    //cout << endl << "#DEBUG# Nombre: " << Nombre;
-    //cout << endl << "#DEBUG# Dirección: " << Direccion;
 
     //calcular el tamaño
     NEstan = 0;
-
 
     TEstante estanteAux;
     while(!FicheroTienda.eof()){
         FicheroTienda.read((char*)&estanteAux, sizeof(TEstante));
         NEstan++;
     }
-
-
 
     // calcular el tamaño del vector
     float resto = NEstan % 4;
@@ -80,7 +76,7 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
     // Cargamos los estantes del fichero
     int offset =  sizeof(Nombre) + sizeof(Direccion);
     FicheroTienda.clear();
-    FicheroTienda.seekg(offset);
+    FicheroTienda.seekg(offset, ios::beg);
 
     for(int i=0;i<NEstan;i++){
         FicheroTienda.read((char*)&estanteAux, sizeof(TEstante));
@@ -105,9 +101,8 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
     bool cambios = true;
     TEstante estante1,estante2,estanteAux;
 
-    //int nCambios = 0;
 
-while(cambios){
+    while(cambios){
         cambios = false;
         for(int i = 0; i<NEstan-1;i++){
 
@@ -142,12 +137,9 @@ while(cambios){
  }
 
 
-
-
   TEstante TTienda::ObtenerEstante(int pPos){
     return Estantes[pPos];
   }
-
 
 
   bool TTienda::EstaAbierta(){
@@ -166,6 +158,7 @@ int TTienda::BuscarEstante(int pCodEstante){
             return i;
 
     return -1;
+
  }
 
  bool TTienda::EliminarEstante(int pPos){
@@ -177,12 +170,10 @@ int TTienda::BuscarEstante(int pCodEstante){
  }
 
 
-
-
 bool TTienda::AnadirEstante(TEstante pEstante){
+
     // Si es igual se necesita aunmentar el tamaño
     if(NEstan == Tamano){
-        cout << endl << "#debug: NEstan y Tamano son iguales.. aumentando el tamaño";
         Tamano += 4;
         TEstante* estanteriaAux = new TEstante[Tamano];
         for(int i=0;i<NEstan;i++)
@@ -192,9 +183,6 @@ bool TTienda::AnadirEstante(TEstante pEstante){
 
         Estantes = estanteriaAux;
 
-        /*Estantes = new TEstante[Tamano];
-        for(int i=0;i<NEstan;i++)
-            Estantes[i] = estanteriaAux[i];*/
     }
 
     Estantes[NEstan] = pEstante;
@@ -224,8 +212,12 @@ bool TTienda::GuardarTienda(){
 
 
 bool TTienda::CerrarTienda(){
+
+    delete Estantes;
     GuardarTienda();
+    NEstan = -1;
     return true;
+
 }
 
 
@@ -266,7 +258,6 @@ int TTienda::ReponerEstante(int pPos, TProducto &pProduc){
     }
 
 }
-
 
 
 bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFiche){
