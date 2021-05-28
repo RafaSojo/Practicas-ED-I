@@ -1,4 +1,6 @@
 #include "TTienda.h"
+#include "Cola.h" //Fichero de definición de la cola de pedidos
+#include "Lista.h" //Fichero de definición de la lista de envios
 
 /* Constructor */
 TTienda::TTienda()
@@ -105,14 +107,16 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
 
     //int nCambios = 0;
 
-    while(cambios){
+while(cambios){
         cambios = false;
         for(int i = 0; i<NEstan-1;i++){
+
 
             estante1 = Estantes[i];
             estante2 = Estantes[i+1];
 
-            if(estante1.CodEstante > estante2.CodEstante){
+            if(strcmp(estante1.CodProd,estante2.CodProd) == 1){
+           // if(estante1.CodEstante > estante2.CodEstante){
                 cambios = true;
                 estanteAux = estante2;
                 Estantes[i+1] = Estantes[i];
@@ -120,7 +124,7 @@ void TTienda::DatosTienda(Cadena pNombTienda, Cadena pDirTienda){
                 //nCambios++;
             }
 
-            if(estante1.CodEstante == estante2.CodEstante){
+            if(strcmp(estante1.CodProd,estante2.CodProd) == 0){
 
                  if(estante1.Posicion > estante2.Posicion){
                     cambios = true;
@@ -178,14 +182,19 @@ int TTienda::BuscarEstante(int pCodEstante){
 bool TTienda::AnadirEstante(TEstante pEstante){
     // Si es igual se necesita aunmentar el tamaño
     if(NEstan == Tamano){
+        cout << endl << "#debug: NEstan y Tamano son iguales.. aumentando el tamaño";
         Tamano += 4;
         TEstante* estanteriaAux = new TEstante[Tamano];
         for(int i=0;i<NEstan;i++)
             estanteriaAux[i] = Estantes[i];
 
-        Estantes = new TEstante[Tamano];
+        delete Estantes;
+
+        Estantes = estanteriaAux;
+
+        /*Estantes = new TEstante[Tamano];
         for(int i=0;i<NEstan;i++)
-            Estantes[i] = estanteriaAux[i];
+            Estantes[i] = estanteriaAux[i];*/
     }
 
     Estantes[NEstan] = pEstante;

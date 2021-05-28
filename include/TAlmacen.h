@@ -1,8 +1,8 @@
 #ifndef TALMACEN_H
 #define TALMACEN_H
 #include "TTipos.h"
-#include “TADcola.h” //Fichero de definición de la cola de pedidos
-#include “TADlista.h” //Fichero de definición de la lista de envios
+#include "Cola.h" //Fichero de definición de la cola de pedidos
+#include "Lista.h" //Fichero de definición de la lista de envios
 
 using namespace std;
 class TAlmacen
@@ -12,8 +12,8 @@ class TAlmacen
     fstream FicheProductos; //Fichero que almacena los productos del almacén.
     int NProduc; //Número de productos que hay en el almacén. Si el almacén está cerrado deberá tener el valor -1.
 
-    cola Pedidos; //Estructura de tipo cola que almacena los pedidos
-    lista Envios; //Estructura de tipo lista que almacena los pedidos a enviar
+    Cola Pedidos; //Estructura de tipo cola que almacena los pedidos
+    Lista Envios; //Estructura de tipo lista que almacena los pedidos a enviar
 public:
     TAlmacen(); //Constructor que debe inicializar los atributos de la clase.
     ~TAlmacen(); //Destructor que cerrará el almacén en caso de que el usuario no lo haya hecho.
@@ -71,7 +71,7 @@ public:
     bool CargarColaPedidos(Cadena Nomf);
 
     //Añadirá un nuevo pedido a la cola de pedidos.
-    void AñadirPedido (TPedido p);
+    void AnadirPedido (TPedido p);
 
     //Método que atiende los pedidos del producto en cuestión pendientes de suministrar con la cantidad
     //comprada por el almacén, los incorpora a la lista de Envíos, eliminando de la cola de pedidos los
@@ -81,7 +81,7 @@ public:
     //la cantidad que se puede suministrar.
     //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
     //sobrante, entra en el Almacén.
-    bool AtenderPedidos(Cadena CodProd,int cantidadcomprada);
+    bool AtenderPedidos(Cadena CodProd, int cantidadcomprada);
 
     //Muestra el contenido completo, con todos los datos de los productos leídos del almacén, de la cola
     //si CodProd es '' o muestra los pedidos del Codprod pasado con todos sus datos del almacén.

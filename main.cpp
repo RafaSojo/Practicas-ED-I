@@ -2,6 +2,8 @@
 #include "TAlmacen.h"
 #include "TTipos.h"
 #include "TTienda.h"
+#include "Cola.h" //Fichero de definición de la cola de pedidos
+#include "Lista.h" //Fichero de definición de la lista de envios
 
 #include <Windows.h>
 #include <cstdio>
@@ -56,6 +58,7 @@ int main()
 
     int opcion_menu;
     int opcion_submenu;
+    int opcion_subsubmenu;
 
 
     /*
@@ -104,6 +107,8 @@ int main()
                 cout << endl << "6.- Actualizar un producto.";
                 cout << endl << "7.- Consultar un producto.";
                 cout << endl << "8.- Eliminar un producto.";
+                cout << endl << "*9.- Gestión de pedidos.";
+                cout << endl << "*10.- Gestión de envios.";
                 cout << endl << "0.- Salir";
                 cout << endl << "> ";
                 cin >> opcion_submenu;
@@ -343,6 +348,17 @@ int main()
                     almacen.EliminarProducto(posicionProducto);
 
                     break;
+
+                case 9:
+                    /* Gestión de pedidos */
+                    break;
+
+
+                case 10:
+                    /* Gestión de envíos */
+
+                    break;
+
                 case 0:
                     break;
                 default:
@@ -376,7 +392,6 @@ int main()
                 {
                 case 1:
                     /* Crear una tienda vacía */
-                    //tienda = new TTienda();
 
                     cin.ignore();
                     cout << endl << "\tIntroduce el nombre de la tienda > ";
@@ -396,8 +411,6 @@ int main()
                     break;
                 case 2:
                     /* Abrir un fichero tienda */
-                    //tienda = new TTienda();
-
                     cout << endl << "Introduzca el fichero de la tienda: "<< endl << "> ";
 
                     cin >> ficheroTienda;
@@ -417,9 +430,6 @@ int main()
                         cout << endl << "Tienda cerrada correctamente.";
                     else
                         cout << endl << "Ocurrió un error al cerrar la tienda";
-
-                    //delete tienda;
-                    //tienda = new TTienda();
 
                     strcpy(nombreTienda, " *tienda no abierta*");
 
@@ -492,15 +502,15 @@ int main()
                     cin >> estante.Capacidad;
 
                     estante.NoProductos = estante.Capacidad+1;
-                   // do{
-                    cout << endl << "\tIntroduce el número de productos (tiene que ser menor de " << estante.Capacidad << ") > ";
-                    cin >> estante.NoProductos;
+                    do{
+                        cout << endl << "\tIntroduce el número de productos (tiene que ser menor de " << estante.Capacidad << ") > ";
+                        cin >> estante.NoProductos;
 
-                    if(estante.NoProductos > estante.Capacidad){
-                        estante.NoProductos = estante.Capacidad;
-                        cout << endl << "\tSe ha introduce más productos que la capacidad. Se ha limitado al máximo: " << estante.NoProductos;
-                    }
-                    //}while(estante.NoProductos>estante.Capacidad);
+                        if(estante.NoProductos > estante.Capacidad){
+                            estante.NoProductos = estante.Capacidad;
+                            cout << endl << "\tSe ha introduce más productos que la capacidad. Se ha limitado al máximo: " << estante.NoProductos;
+                        }
+                    }while(estante.NoProductos>estante.Capacidad);
 
 
                     cout << endl << "\tIntroduce la posición > ";
