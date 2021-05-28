@@ -38,10 +38,14 @@
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 		</Linker>
+		<Unit filename="include/Cola.h" />
+		<Unit filename="include/Lista.h" />
 		<Unit filename="include/TAlmacen.h" />
 		<Unit filename="include/TTienda.h" />
 		<Unit filename="include/TTipos.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Cola.cpp" />
+		<Unit filename="src/Lista.cpp" />
 		<Unit filename="src/TAlmacen.cpp" />
 		<Unit filename="src/TTienda.cpp" />
 		<Extensions>

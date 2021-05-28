@@ -15,13 +15,13 @@ public:
     Lista(TPedido pedido);
     bool esVacia();
     int longitud();
-    /*void anadirIzq(TPedido pedido);
+    void anadirIzq(TPedido pedido);
     void anadirDch(TPedido pedido);
     void eliminarIzq();
     void eliminarDch();
     TPedido observarIzq();
     TPedido observarDch();
-    void concatenar(TPedido Lista[]);*/
+    void concatenar(TPedido Lista[]);
     bool pertenece(TPedido pedido);
     void insertar(int i, TPedido pedido);
     void eliminar(int i);

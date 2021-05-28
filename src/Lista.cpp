@@ -2,8 +2,7 @@
 #include "TTipos.h"
 
 Lista::Lista(){
-    n=0;
-
+    n = 0;
 }
 
 Lista::Lista(TPedido pedido){
@@ -60,7 +59,7 @@ int Lista::longitud(){
     return n;
 }
 
-/*
+
 void Lista::anadirIzq(TPedido pedido){
     insertar(1, pedido);
 }
@@ -78,22 +77,22 @@ void Lista::eliminarIzq(){
 
 void Lista::eliminarDch(){
     n--;
-}*/
-/*
+}
+
 TPedido Lista::observarIzq(){
     return observar(1);
 }
 
 TPedido Lista::observarDch(){
     return observar(n);
-}*/
+}
 
-/*void Lista::concatenar(TPedido Lista[]){
+void Lista::concatenar(TPedido Lista[]){
 
    // for(int i = 1; i <= lista.longitud(); i++){
      //   insertar(n + 1, Lista.observar(i));
     //}
-}*/
+}
 
 bool Lista::pertenece(TPedido pedido){
     return (posicion(pedido) != -1);
