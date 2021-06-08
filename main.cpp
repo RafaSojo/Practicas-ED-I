@@ -323,7 +323,6 @@ int main()
                         cin.getline(producto.Descripcion, sizeof(Cadena));
                     }
 
-
                     cout << endl << "\tPrecio (" << producto.Precio << ") >";
                     cin >> std::skipws >> opcionModificar;
                     if(strcmp(opcionModificar, "n") != 0){
@@ -465,7 +464,7 @@ int main()
                                     break;
                                 }
 
-                                cout << endl << "Introduce la cantidad";
+                                cout << endl << "Introduce la cantidad >> ";
                                 cin >> cantidadProducto;
 
                                 almacen.AtenderPedidos(codigoProducto, cantidadProducto);
@@ -530,7 +529,6 @@ int main()
                     }while(opcion_subsubmenu != 0);
 
                     break;
-
 
                 case 10:
                     /* Gestión de envíos */
@@ -646,7 +644,6 @@ int main()
             /* Menú Tienda */
             do
             {
-
                 mostrarCabeceraTienda(nombreTienda);
                 cin >> opcion_submenu;
                 switch(opcion_submenu)
@@ -719,7 +716,6 @@ int main()
 
                     // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
                     for(int i=0; i < tienda.NoEstantes(); i++){
-                            //FicheProductos.read((char*)&producto, sizeof(producto));
                             estante = tienda.ObtenerEstante(i);
                             cout << estante.CodEstante << "\t\t" << estante.CodProd << "\t\t" << estante.Capacidad << "\t\t";
                             cout << estante.NoProductos << "\t\t" << estante.Posicion << endl;
@@ -756,7 +752,6 @@ int main()
                         break;
                     }
 
-
                     producto = almacen.ObtenerProducto(posicionProducto);
 
                     cout << endl << "\tIntroduce la capacidad > ";
@@ -779,8 +774,23 @@ int main()
 
                     // Quitamos los productos solicitados del almacen (los que se pueda)
                     if(estante.NoProductos > producto.Cantidad){
+
+                        // generamos pedido para los restantes
+                        pedido.CantidadPed = estante.NoProductos - producto.Cantidad;
+                        strcpy(pedido.CodProd, producto.CodProd);
+
+                        tienda.NombreFicheroTienda(ficheroTienda);
+
+                        strcpy(pedido.Nomtienda, ficheroTienda);
+
+                        almacen.AnadirPedido(pedido);
+
+
                         estante.NoProductos = producto.Cantidad;
                         producto.Cantidad = 0;
+
+                        cout << endl << "\tSe ha hecho un pedido al almacén para " << pedido.CantidadPed << " productos.";
+
                     }else{
                         producto.Cantidad = producto.Cantidad - estante.NoProductos;
                     }
@@ -851,17 +861,29 @@ int main()
                             }else{
                                 // mover desde almacen a tienda
                                 if((cantidadProducto + estante.NoProductos) > estante.Capacidad ){
+
                                     // limitamos el número de productos que se pueden reponer
-                                    //cantidadProducto =  cantidadProducto - (cantidadProducto + estante.NoProductos - estante.Capacidad);
                                     cantidadProducto = estante.Capacidad;
-                                    //producto.Cantidad -= cantidadProducto;
                                     cout << endl << "\tSe ha introducido un número de productos mayor que la capacidad. Se ha limitado a " << cantidadProducto;
+
                                 }
 
                                 if(cantidadProducto > producto.Cantidad){
+                                    // generamos pedido para los restantes
+                                    pedido.CantidadPed = cantidadProducto - producto.Cantidad;
+                                    strcpy(pedido.CodProd, producto.CodProd);
+
+                                    tienda.NombreFicheroTienda(ficheroTienda);
+
+                                    strcpy(pedido.Nomtienda, ficheroTienda);
+
+                                    almacen.AnadirPedido(pedido);
+
+
                                     cantidadProducto = producto.Cantidad;
                                     cout << endl << "\tEn el almacén no hay tantos productos. Se ha limitado a " << cantidadProducto;
-                                    //producto.Cantidad = 0;
+                                    cout << endl << "\tSe ha hecho un pedido al almacén para " << pedido.CantidadPed << " productos.";
+
                                 }
 
                                 // calculamos cuanto falta para llenar el estante

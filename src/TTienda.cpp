@@ -86,15 +86,11 @@ void TTienda::NombreFicheroTienda(Cadena NomF){
     // Ordenamos los estantes
     OrdenarProductos();
 
-
     FicheroTienda.close();
 
     return true;
 
  }
-
-
-
 
  void TTienda::OrdenarProductos(){
 
@@ -111,12 +107,10 @@ void TTienda::NombreFicheroTienda(Cadena NomF){
             estante2 = Estantes[i+1];
 
             if(strcmp(estante1.CodProd,estante2.CodProd) == 1){
-           // if(estante1.CodEstante > estante2.CodEstante){
                 cambios = true;
                 estanteAux = estante2;
                 Estantes[i+1] = Estantes[i];
                 Estantes[i] = estanteAux;
-                //nCambios++;
             }
 
             if(strcmp(estante1.CodProd,estante2.CodProd) == 0){
@@ -126,7 +120,6 @@ void TTienda::NombreFicheroTienda(Cadena NomF){
                     estanteAux = estante2;
                     Estantes[i+1] = Estantes[i];
                     Estantes[i] = estanteAux;
-                    //nCambios++;
                  }
             }
 

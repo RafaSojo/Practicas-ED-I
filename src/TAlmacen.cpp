@@ -202,12 +202,7 @@ bool TAlmacen::CargarListaEnvios(Cadena Nomf){
 
         Envios.insertar(i, pedidoAux);
         i++;
-        //Envios.anadirDch(pedidoAux);
-        /*cout << endl << pedidoAux.CodProd;
-        cout << endl << pedidoAux.CantidadPed;
-        cout << endl << pedidoAux.Nomtienda;
 
-        cout << endl << Envios.observar(Envios.longitud()-1).CodProd;*/
     }
 
     return !ficheroEnvios.fail();
@@ -249,9 +244,83 @@ void TAlmacen::AnadirPedido (TPedido p){
  //la cantidad que se puede suministrar.
  //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
  //sobrante, entra en el Almacén.
- bool TAlmacen::AtenderPedidos(Cadena CodProd,int cantidadcomprada){
+ bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada){
     //to-do
 
+    //Cola colaNueva;
+
+    TPedido pedidoAux;
+    TPedido envioAux;
+    TProducto productoAux;
+
+    int cantidadEnvio;
+
+    for(int i=0; i < Pedidos.longitud(); i++){
+
+        pedidoAux = Pedidos.primero();
+        // comprobamos el código de producto
+        if(strcmp(pedidoAux.CodProd, CodProd) == 0){
+
+            //cantidadEnvio = cantidadcomprada - pedidoAux.CantidadPed;
+
+            if(cantidadcomprada - pedidoAux.CantidadPed >= 0){
+                // creamos pedido y restamos cantidad al total
+                cantidadEnvio = pedidoAux.CantidadPed;
+                cantidadcomprada -= cantidadEnvio;
+
+                envioAux.CantidadPed = cantidadEnvio;
+                strcpy(envioAux.CodProd, pedidoAux.CodProd);
+                strcpy(envioAux.Nomtienda, pedidoAux.Nomtienda);
+
+                Envios.anadirIzq(envioAux);
+
+            }else{
+
+                if(cantidadcomprada > 0){
+                    // crea envio parcial
+                    cantidadEnvio = cantidadcomprada;
+                    cantidadcomprada -= cantidadEnvio;
+
+                    envioAux.CantidadPed = cantidadEnvio;
+                    strcpy(envioAux.CodProd,pedidoAux.CodProd);
+                    strcpy(envioAux.Nomtienda,pedidoAux.Nomtienda);
+
+                    Envios.anadirIzq(envioAux);
+
+                    pedidoAux.CantidadPed -= cantidadEnvio;
+
+                    //colaNueva.encolar(pedidoAux);
+                    Pedidos.encolar(pedidoAux);
+
+                }else{
+                    // No se puede crear envio
+                    //colaNueva.encolar(pedidoAux);
+                    Pedidos.encolar(pedidoAux);
+                }
+
+            }
+
+        }else{
+
+            //colaNueva.encolar(pedidoAux);
+            Pedidos.encolar(pedidoAux);
+
+        }
+
+        Pedidos.desencolar();
+
+    }
+
+    if(cantidadcomprada > 0){
+        // Si hay excendete
+        int posicionProducto = BuscarProducto(CodProd);
+        productoAux = ObtenerProducto(posicionProducto);
+        productoAux.Cantidad += cantidadcomprada;
+
+        ActualizarProducto(posicionProducto, productoAux);
+    }
+
+    return true;
 
 }
 
@@ -271,15 +340,12 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd){
         Pedidos.encolar(pedido);
     }
 
-
 }
 
 
 // Muestra la cantidad pendiente de cada tipo de producto si CodProd es '' o del producto concreto
 // que se pase por parámetro.
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
-
-    // to-do corregir fallo
 
     if(Pedidos.esVacia()){
         cout << endl << "La cola de pedidos está vacía.";
@@ -291,23 +357,15 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
 
     TPedido pedidoAux;
     Lista listaAux;
-    //bool existe;
     int posicion;
 
 
     for(int i=0; i < longitud ; i++){
         pedido = Pedidos.primero();
 
-
-
         if(strcmp(CodProd, "") == 0 || strcmp(CodProd, pedido.CodProd) == 0){
 
             posicion = listaAux.posicion(pedido);
-            cout << endl << posicion;
-            cout << endl << pedido.Nomtienda;
-            cout << endl << pedido.CodProd;
-            cout << endl << pedido.CantidadPed;
-            cout << endl << "-------";
 
             if(posicion == -1){
                 listaAux.anadirDch(pedido);
@@ -325,16 +383,10 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
     }
 
     // en este momento tenemos listaAux con la suma de todos los envios
-
-    cout << endl << "Logitud aux: " << listaAux.longitud();
-
     for(int i=0; i < listaAux.longitud(); i++){
-    //for(int i=0; i < 30; i++){
-
         pedidoAux = listaAux.observar(i + 1);
         cout << endl << "Cód Producto: " << pedidoAux.CodProd << ", Cantidad: " << pedidoAux.CantidadPed << ", Fichero: " << pedidoAux.Nomtienda;
     }
-
 
 
 }
@@ -343,7 +395,20 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
 //Se encarga de meter en la lista de envíos, de forma ordenada, por nombre del fichero de tienda, el
 //pedido a enviar.
 bool TAlmacen::InsertarEnvios(TPedido p){
-    // to-do
+
+    TPedido pedidoAux;
+    int posicion = 0;
+
+    // Calcular posición de insertar
+    for(int i=0; i < Envios.longitud(); i++){
+        pedidoAux = Envios.observar(i + 1);
+        if(strcmp(pedidoAux.Nomtienda, p.Nomtienda) == 0)
+            posicion = i;
+    }
+
+    Envios.insertar(posicion+1, p);
+
+    return true;
 
 }
 
@@ -351,25 +416,25 @@ bool TAlmacen::InsertarEnvios(TPedido p){
 //Se encarga de sacar de la lista los envíos que tienen por destino la tienda que se le pasa por
 //parámetro mostrando por pantalla los envíos que van en el camión.
 bool TAlmacen::SalidaCamionTienda(Cadena NomTienda){
-    // to-do
 
-    /*
+    TPedido pedidoAux;
+    Lista listaNueva;
 
-      TPedido p;
-    int i;
-    p = Envios.observar(i);
-    cout << "Envios que van en el camion: " << endl;
-    cout << "CODPROD\t\tNOMTIENDA\t\tCANTIDAD" << endl;
+    cout << endl << "\tPedidos hacia " << NomTienda << ":";
+    cout << endl << "Código Producto\tCantidad\tNombre tienda";
 
-    for(int i = 0; i < Envios.longitud(); i++){
-        if(strcmp(NomTienda, p.Nomtienda) == 0){
-            cout << p.CodProd << "\t" << p.Nomtienda << "\t" << p.CantidadPed << endl;
-            Envios.eliminar(i);
-        }
+    for(int i=0; i < Envios.longitud(); i++){
+        pedidoAux = Envios.observar(i+1);
 
+        if(strcmp(pedidoAux.Nomtienda, NomTienda) == 0)
+            cout << endl << pedidoAux.CodProd << "\t" << pedidoAux.Nomtienda << "\t" << pedidoAux.CantidadPed;
+        else
+            listaNueva.anadirDch(pedidoAux);
     }
 
-    */
+    Envios = listaNueva;
+
+    return true;
 
 }
 
