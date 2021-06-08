@@ -10,11 +10,6 @@
 
 #include <cmath>
 
-/*
-    cola -> FIFO (pedidos)
-    lista -> ??? (envios)
-
-*/
 
 using namespace std;
 
@@ -52,8 +47,8 @@ void mostrarCabeceraAlmacen(Cadena nombreAlmacen){
     cout << endl << "6.- Actualizar un producto.";
     cout << endl << "7.- Consultar un producto.";
     cout << endl << "8.- Eliminar un producto.";
-    cout << endl << "*9.- Gestión de pedidos.";
-    cout << endl << "*10.- Gestión de envios.";
+    cout << endl << "9.- Gestión de pedidos.";
+    cout << endl << "10.- Gestión de envios.";
     cout << endl << "0.- Salir";
     cout << endl << "> ";
 
@@ -102,7 +97,7 @@ void mostrarCabeceraEnvios(){
     cout << endl << "1.- Cargar envíos de fichero.";
     cout << endl << "2.- Insertar un nuevo envío.";
     cout << endl << "3.- Reparto de envíos a tienda.";
-    cout << endl << "4.- Listar todos ols envíos.";
+    cout << endl << "4.- Listar todos los envíos.";
     cout << endl << "5.- Listar los envíos a una tienda.";
     cout << endl << "6.- Guardar envíos a fichero.";
     cout << endl << "0.- Salir";
@@ -126,6 +121,9 @@ int main()
 
     Cadena nombreAlmacen;
     strcpy(nombreAlmacen, " *almacen no abierto* ");
+
+    Cadena nombreLista;
+    Cadena nombrePedidos;
 
     Cadena nombreTienda;
     strcpy(nombreTienda, " *tienda no abierta* ");
@@ -154,6 +152,8 @@ int main()
     float porcentajeOcupacion;
 
     TFecha fecha;
+
+    TPedido pedido;
 
     int opcion_menu;
     int opcion_submenu;
@@ -227,17 +227,19 @@ int main()
                         cout << endl << "No hay ningún almacen abierto" << endl;
                         break;
                     }
-                        cout << endl << "Hay un total de: " << almacen.NProductos() << " productos";
-                        cout << endl << "Lista de productos:" << endl;
-                        cout << endl << "Codigo \t\tCantidad \tNombre \t\t\tPrecio \tDescripcion \tCaducidad" << endl;
+
+                    cout << endl << "Hay un total de: " << almacen.NProductos() << " productos";
+                    cout << endl << "Lista de productos:" << endl;
+                    cout << endl << "Codigo \t\tCantidad \tNombre \t\t\tPrecio \tDescripcion \tCaducidad" << endl;
 
 
-                        // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
-                        for(int i=0; i<almacen.NProductos(); i++){
-                                producto = almacen.ObtenerProducto(i);
-                                cout << producto.CodProd << "\t\t" << producto.Cantidad << "\t\t" << producto.NombreProd << "\t\t";
-                                cout << producto.Precio << "\t" << producto.Descripcion << "\t" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo  << endl;
-                        }
+                    // Para hacer la visualización mejor-> cout.flags(ios::left) y cout.width(tamaño asignación)
+                    for(int i=0; i<almacen.NProductos(); i++){
+                            producto = almacen.ObtenerProducto(i);
+                            cout << producto.CodProd << "\t\t" << producto.Cantidad << "\t\t" << producto.NombreProd << "\t\t";
+                            cout << producto.Precio << "\t" << producto.Descripcion << "\t" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo  << endl;
+                    }
+
                     break;
                 case 5:
                     /* Añadir un producto */
@@ -337,7 +339,7 @@ int main()
                     }
 
 
-                      cout << endl << "\tFecha Caducidad (" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo << ") >";
+                    cout << endl << "\tFecha Caducidad (" << producto.Caducicidad.Dia << "/" << producto.Caducicidad.Mes << "/" << producto.Caducicidad.Anyo << ") >";
                     cin >> std::skipws >> opcionModificar;
                     if(strcmp(opcionModificar, "n") != 0){
                         cout << endl << "\tIntroduce el dia de la caducidad del producto > ";
@@ -412,6 +414,11 @@ int main()
                 case 9:
                     /* Gestión de pedidos */
 
+                    if(!almacen.EstaAbierto()){
+                        cout << endl << "No hay ningún almacen abierto" << endl;
+                        break;
+                    }
+
                     do{
                         mostrarCabeceraPedidos();
 
@@ -421,43 +428,98 @@ int main()
                             case 1:
                                 /* Cargar pedidos de fichero */
 
+                                cout << endl << "Introduce el nombre del fichero >> ";
+                                cin.ignore();
+                                cin.getline(nombrePedidos, sizeof(Cadena));
+                                if(almacen.CargarColaPedidos(nombrePedidos))
+                                    cout << endl << "Ocurrió un error al cargar la cola.";
                                 break;
 
                             case 2:
                                 /* Añadir pedido */
 
+                                cout << endl << "Introduce el código del producto >> ";
+                                cin >> pedido.CodProd;
+
+                                cout << endl << "Introduce la cantidad de producto >> ";
+                                cin >> pedido.CantidadPed;
+
+                                cout << endl << "Introduce el fichero de la tienda (por defecto tienda abierta) >> ";
+                                cin.getline(ficheroTienda, sizeof(Cadena));
+
+                                if(strcmp(ficheroTienda, "") == 0)
+                                    tienda.NombreFicheroTienda(ficheroTienda);
+
+                                strcpy(pedido.Nomtienda, ficheroTienda);
+
+                                almacen.AnadirPedido(pedido);
                                 break;
 
                             case 3:
                                 /* Atender pedidos */
+                                cout << endl << "Introduce el código del producto >> ";
+                                cin >> codigoProducto;
+
+                                if(almacen.BuscarProducto(codigoProducto) == -1){
+                                    cout << endl << "El producto no existe en el almacén.";
+                                    break;
+                                }
+
+                                cout << endl << "Introduce la cantidad";
+                                cin >> cantidadProducto;
+
+                                almacen.AtenderPedidos(codigoProducto, cantidadProducto);
 
                                 break;
 
                             case 4:
                                 /* Listar pedidos completos de todos los productos */
 
+                                almacen.ListarPedidosCompleto("");
+
                                 break;
 
                             case 5:
                                 /* Listar pedidos de un producto */
+
+                                cin.ignore();
+
+                                cout << endl << "Introduce el código de producto >> ";
+                                cin.getline(codigoProducto, sizeof(Cadena));
+
+                                almacen.ListarPedidosCompleto(codigoProducto);
 
                                 break;
 
                             case 6:
                                 /* Listar todas las cantidades pendientes */
 
+                                almacen.ListarCantidadesPendientes("");
+
                                 break;
 
                             case 7:
                                 /* Listar cantidades pendientes de un producto */
 
+                                cin.ignore();
+
+                                cout << endl << "Introduce el código de producto >> ";
+                                cin.getline(codigoProducto, sizeof(Cadena));
+
+                                almacen.ListarCantidadesPendientes(codigoProducto);
+
                                 break;
 
                             case 8:
                                 /* Guardar pedidos a fichero */
+                                cin.ignore();
+
+                                cout << endl << "Introduce el fichero para guardar la cola de pedidos >> ";
+                                cin.getline(nombrePedidos, sizeof(Cadena));
+
+                                almacen.SalvarColaPedidos(nombrePedidos);
 
                                 break;
-
 
                             case 0:
                                 break;
@@ -472,6 +534,12 @@ int main()
 
                 case 10:
                     /* Gestión de envíos */
+
+                    if(!almacen.EstaAbierto()){
+                        cout << endl << "No hay ningún almacen abierto" << endl;
+                        break;
+                    }
+
                     do{
                         mostrarCabeceraEnvios();
                         cin >> opcion_subsubmenu;
@@ -479,32 +547,79 @@ int main()
                         {
                             case 1:
                                 /* Cargar envios de fichero */
+                                cout << endl << "Introduce el fichero para cargar la lista >> ";
+                                cin.ignore();
+                                cin.getline(nombreLista, sizeof(Cadena));
+
+                                if(almacen.CargarListaEnvios(nombreLista))
+                                    cout << endl << "Ocurrió un error al cargar la lista.";
 
                                 break;
 
                             case 2:
                                 /* Insertar un nuevo envio */
 
+                                cout << endl << "Introduce el código del producto >> ";
+                                cin >> pedido.CodProd;
+
+                                cout << endl << "Introduce la cantidad de producto >> ";
+                                cin >> pedido.CantidadPed;
+
+                                cout << endl << "Introduce el fichero de la tienda (por defecto tienda abierta) >> ";
+                                cin.getline(ficheroTienda, sizeof(Cadena));
+
+                                if(strcmp(ficheroTienda, "") == 0)
+                                    tienda.NombreFicheroTienda(ficheroTienda);
+
+                                strcpy(pedido.Nomtienda, ficheroTienda);
+
+                                almacen.InsertarEnvios(pedido);
+
+
                                 break;
 
                             case 3:
                                 /* Reparto de envíos a tienda */
+                                cout << endl << "Introduce el código del producto >> ";
+                                cin >> codigoProducto;
+
+                                if(almacen.BuscarProducto(codigoProducto) == -1)
+                                    cerr << endl << "El producto solicitado no existe en el almacén. ";
+                                    //cerr
+
+                                cout << endl << "Introduce la cantidad de producto >> ";
+                                cin >> cantidadProducto;
+
+                                almacen.AtenderPedidos(codigoProducto, cantidadProducto);
 
                                 break;
 
                             case 4:
                                 /* Listar todos los envíos */
 
+                                almacen.ListarListaEnvios("");
+
                                 break;
 
                             case 5:
                                 /* Listar los envíos a una tienda */
 
+                                cin.ignore();
+
+                                cout << endl << "Introduce el fichero de la tienda >> ";
+                                cin.getline(ficheroTienda, sizeof(Cadena));
+
+                                almacen.ListarListaEnvios(ficheroTienda);
                                 break;
 
                             case 6:
                                 /* Guardar envios a fichero */
+                                cin.ignore();
 
+                                cout << endl << "Introduce el fichero para guardar la lista de envios >> ";
+                                cin.getline(nombreLista, sizeof(Cadena));
+
+                                almacen.SalvarListaEnvios(nombreLista);
                                 break;
 
                             case 0:

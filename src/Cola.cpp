@@ -6,17 +6,19 @@ Cola::Cola(){
 }
 
 void Cola::encolar(TPedido pedido){
-    if(fin + 1 < MAX){
-        fin++;
-        elementos[fin] = pedido;
+    if( (fin + 1) < MAX){
+        elementos[++fin] = pedido;
+
     }
 }
 
 void Cola::desencolar(){
+
     for(int i = inicio; i < fin; i++){
-        elementos[i] = elementos[i + 1]; //desplazamiento
-        fin--;
+        elementos[i] = elementos[i + 1];
     }
+        fin--;
+
 }
 
 TPedido Cola::primero(){

@@ -61,8 +61,6 @@ void TAlmacen::DatosAlmacen(Cadena pNombAlmacen, Cadena pDirAlmacen){
 }
 
 
-
-
 TProducto TAlmacen::ObtenerProducto(int pPos){
     TProducto producto;
 
@@ -185,18 +183,31 @@ bool TAlmacen::EliminarProducto(int pPos){
 //El fichero tiene una sucesión de elementos de tipo TPedido.
 bool TAlmacen::CargarListaEnvios(Cadena Nomf){
 
+
     fstream ficheroEnvios;
-
     TPedido pedidoAux;
+    ficheroEnvios.open(Nomf, ios::in|ios::binary);
 
-    ficheroEnvios.open(Nomf, ios::in|ios::out|ios::binary);
-
-    if(!ficheroEnvios.fail())
+    if(ficheroEnvios.fail())
         return false;
+
+    // Reseteamos lista de envios
+    for(int i=0; i<Envios.longitud(); i++)
+        Envios.eliminar(0);
+
+    int i = 0;
 
     while(!ficheroEnvios.eof()){
         ficheroEnvios.read((char*)&pedidoAux, sizeof(TPedido));
-        Envios.anadirDch(pedidoAux);
+
+        Envios.insertar(i, pedidoAux);
+        i++;
+        //Envios.anadirDch(pedidoAux);
+        /*cout << endl << pedidoAux.CodProd;
+        cout << endl << pedidoAux.CantidadPed;
+        cout << endl << pedidoAux.Nomtienda;
+
+        cout << endl << Envios.observar(Envios.longitud()-1).CodProd;*/
     }
 
     return !ficheroEnvios.fail();
@@ -211,9 +222,9 @@ bool TAlmacen::CargarColaPedidos(Cadena Nomf){
 
     TPedido pedidoAux;
 
-    ficheroPedidos.open(Nomf, ios::in|ios::out|ios::binary);
+    ficheroPedidos.open(Nomf, ios::in|ios::binary);
 
-    if(!ficheroPedidos.fail())
+    if(ficheroPedidos.fail())
         return false;
 
     while(!ficheroPedidos.eof()){
@@ -226,7 +237,7 @@ bool TAlmacen::CargarColaPedidos(Cadena Nomf){
 }
 
 // Añadirá un nuevo pedido a la cola de pedidos.
-void TAlmacen::AñadirPedido (TPedido p){
+void TAlmacen::AnadirPedido (TPedido p){
     Pedidos.encolar(p);
 }
 
@@ -248,6 +259,17 @@ void TAlmacen::AñadirPedido (TPedido p){
 // si CodProd es '' o muestra los pedidos del Codprod pasado con todos sus datos del almacén.
 void TAlmacen::ListarPedidosCompleto(Cadena CodProd){
 
+    int longitud = Pedidos.longitud();
+    TPedido pedido;
+
+    for(int i=0; i < longitud; i++){
+        pedido = Pedidos.primero();
+        if(strcmp(CodProd, "") == 0 || strcmp(CodProd, pedido.CodProd) == 0){
+            cout << endl << "Cód Producto: " << pedido.CodProd << ", Cantidad: " << pedido.CantidadPed << ", Fichero: " << pedido.Nomtienda;
+        }
+        Pedidos.desencolar();
+        Pedidos.encolar(pedido);
+    }
 
 
 }
@@ -257,16 +279,60 @@ void TAlmacen::ListarPedidosCompleto(Cadena CodProd){
 // que se pase por parámetro.
 void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
 
+    // to-do corregir fallo
+
+    if(Pedidos.esVacia()){
+        cout << endl << "La cola de pedidos está vacía.";
+        return;
+    }
+
     int longitud = Pedidos.longitud();
     TPedido pedido;
 
-    for(int i=0; i < longitud; i++){
+    TPedido pedidoAux;
+    Lista listaAux;
+    //bool existe;
+    int posicion;
+
+
+    for(int i=0; i < longitud ; i++){
         pedido = Pedidos.primero();
-        if(strcmp(CodProd, "") == 0 || strcmp(CodProd, pedido.CodProd)){
-            cout << endl << "Cód Producto: " << pedido.CodProd << ", Cantidad: " << pedido.CantidadPed << ", Fichero: " << pedido.Nomtienda;
+
+
+
+        if(strcmp(CodProd, "") == 0 || strcmp(CodProd, pedido.CodProd) == 0){
+
+            posicion = listaAux.posicion(pedido);
+            cout << endl << posicion;
+            cout << endl << pedido.Nomtienda;
+            cout << endl << pedido.CodProd;
+            cout << endl << pedido.CantidadPed;
+            cout << endl << "-------";
+
+            if(posicion == -1){
+                listaAux.anadirDch(pedido);
+            }else{
+                pedidoAux = listaAux.observar(posicion);
+                pedidoAux.CantidadPed += pedido.CantidadPed;
+
+                listaAux.modificar(posicion, pedidoAux);
+            }
         }
-        Pedidos.desencolar();
+
         Pedidos.encolar(pedido);
+        Pedidos.desencolar();
+
+    }
+
+    // en este momento tenemos listaAux con la suma de todos los envios
+
+    cout << endl << "Logitud aux: " << listaAux.longitud();
+
+    for(int i=0; i < listaAux.longitud(); i++){
+    //for(int i=0; i < 30; i++){
+
+        pedidoAux = listaAux.observar(i + 1);
+        cout << endl << "Cód Producto: " << pedidoAux.CodProd << ", Cantidad: " << pedidoAux.CantidadPed << ", Fichero: " << pedidoAux.Nomtienda;
     }
 
 
@@ -277,6 +343,7 @@ void TAlmacen::ListarCantidadesPendientes(Cadena CodProd){
 //Se encarga de meter en la lista de envíos, de forma ordenada, por nombre del fichero de tienda, el
 //pedido a enviar.
 bool TAlmacen::InsertarEnvios(TPedido p){
+    // to-do
 
 }
 
@@ -284,6 +351,25 @@ bool TAlmacen::InsertarEnvios(TPedido p){
 //Se encarga de sacar de la lista los envíos que tienen por destino la tienda que se le pasa por
 //parámetro mostrando por pantalla los envíos que van en el camión.
 bool TAlmacen::SalidaCamionTienda(Cadena NomTienda){
+    // to-do
+
+    /*
+
+      TPedido p;
+    int i;
+    p = Envios.observar(i);
+    cout << "Envios que van en el camion: " << endl;
+    cout << "CODPROD\t\tNOMTIENDA\t\tCANTIDAD" << endl;
+
+    for(int i = 0; i < Envios.longitud(); i++){
+        if(strcmp(NomTienda, p.Nomtienda) == 0){
+            cout << p.CodProd << "\t" << p.Nomtienda << "\t" << p.CantidadPed << endl;
+            Envios.eliminar(i);
+        }
+
+    }
+
+    */
 
 }
 
@@ -291,17 +377,69 @@ bool TAlmacen::SalidaCamionTienda(Cadena NomTienda){
 //Si se le pasa el nombre de una tienda muestra por pantalla los envíos a dicha tienda.
 void TAlmacen::ListarListaEnvios(Cadena Nomtienda){
 
+    TPedido pedido;
+
+    cout << endl << "Lista de envios: ";
+
+    for(int i=0; i < Envios.longitud(); i++){
+        pedido = Envios.observar(i);
+
+        /*cout << endl << Nomtienda;
+        cout << endl << pedido.Nomtienda;*/
+        if(strcmp(Nomtienda, "") == 0 || strcmp(Nomtienda, pedido.Nomtienda) == 0){
+            // muestra todo el contenido de la lista de envios
+            cout << endl << "\tPedido: " << i+1;
+            cout << endl << "\t\tProducto: " << pedido.CodProd;
+            cout << endl << "\t\tCantidad: " << pedido.CantidadPed;
+            cout << endl << "\t\tFichero tienda: " << pedido.Nomtienda;
+        }
+    }
+
 }
 
 
 //Método que vuelca en el fichero nomf la cola de pedidos.
 bool TAlmacen::SalvarColaPedidos(Cadena Nomf){
 
+    int longitud = Pedidos.longitud();
+    TPedido pedido;
+
+    fstream ficheroPedidos;
+    ficheroPedidos.open(Nomf, ios::in|ios::out|ios::binary);
+
+    ficheroPedidos.seekp(0, ios::beg);
+
+    for(int i=0; i < longitud; i++){
+        pedido = Pedidos.primero();
+
+        ficheroPedidos.write((char*) &pedido, sizeof(TPedido));
+
+        Pedidos.desencolar();
+        Pedidos.encolar(pedido);
+    }
+
+    return true;
 }
 
 
 //Método que vuelca en el fichero nomf la lista de envíos.
 bool TAlmacen::SalvarListaEnvios(Cadena Nomf){
+
+
+    int longitud = Envios.longitud();
+    TPedido pedido;
+
+    fstream ficheroPedidos;
+    ficheroPedidos.open(Nomf, ios::in|ios::out|ios::binary);
+
+    ficheroPedidos.seekp(0, ios::beg);
+
+    for(int i=0; i < longitud; i++){
+        pedido = Envios.observar(i);
+        ficheroPedidos.write((char*) &pedido, sizeof(TPedido));
+    }
+
+    return true;
 
 }
 

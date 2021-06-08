@@ -11,15 +11,19 @@ Lista::Lista(TPedido pedido){
 }
 
 void Lista::insertar(int i, TPedido pedido){
-    int pos, postabla;
+    int postabla;
+
     postabla = i - 1;
+
     if (n < MAX){
-        for (pos = n - 1; pos >= postabla; pos--){
-            elementos[pos+1] = elementos[pos];//Desplazamiento
-            elementos[postabla] = pedido;
-            n++;
-        }
+
+        for(int x=postabla; x < n; x++)
+            elementos[x+1] = elementos[x];
+
+        elementos[postabla] = pedido;
+        n++;
     }
+
 }
 
 void Lista::eliminar(int i){
@@ -45,14 +49,22 @@ bool Lista::esVacia(){
 }
 
 int Lista::posicion(TPedido pedido){
-    int i = 0;
-    while((elementos[i].CodProd != pedido.CodProd) && (i < n)){
+    /*int i = 0;
+    while(strcmp(elementos[i].CodProd, pedido.CodProd) != 0 && (i < n)){
         i++;
     }
-    if(elementos[i].CodProd == pedido.CodProd){
+
+    if( strcmp(elementos[i].CodProd, pedido.CodProd) == 0 ){
         return i + 1;
     }
-    else return -1;
+    else
+        return -1;*/
+    for(int i=0; i < longitud(); i++)
+        if(strcmp(elementos[i].CodProd, pedido.CodProd) == 0)
+            return i + 1;
+
+
+    return -1;
 }
 
 int Lista::longitud(){
