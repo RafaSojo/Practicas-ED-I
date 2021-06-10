@@ -512,8 +512,8 @@ bool TAlmacen::RefundirPedidos(Cadena tiendaFundida1, Cadena tiendaFundida2){
     for(int i=0; i < longitud; i++){
         pedido = Pedidos.primero();
 
-        if(strcmp(pedido.Nomtienda, tiendaFundida2) == 0)
-            strcpy(pedido.Nomtienda, tiendaFundida1);
+        if(strcmp(pedido.Nomtienda, tiendaFundida1) == 0)
+            strcpy(pedido.Nomtienda, tiendaFundida2);
 
 
         Pedidos.desencolar();

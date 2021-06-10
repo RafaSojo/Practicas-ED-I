@@ -528,10 +528,10 @@ int main()
                                 /* Refundir pedidos */
                                 cin.ignore();
 
-                                cout << endl << "Introduce el fichero de la tienda origen (la que compra) >> ";
+                                cout << endl << "Introduce el fichero de la tienda origen (la que es comprada) >> ";
                                 cin.getline(tiendaFundida1, sizeof(Cadena));
 
-                                cout << endl << "Introduce el fichero de la tienda destino (la que es comprada) >> ";
+                                cout << endl << "Introduce el fichero de la tienda destino (la que compra) >> ";
                                 cin.getline(tiendaFundida2, sizeof(Cadena));
 
                                 if(almacen.RefundirPedidos(tiendaFundida1, tiendaFundida2))
