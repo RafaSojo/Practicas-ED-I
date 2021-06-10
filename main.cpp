@@ -563,6 +563,8 @@ int main()
                                 cout << endl << "Introduce la cantidad de producto >> ";
                                 cin >> pedido.CantidadPed;
 
+                                cin.ignore();
+
                                 cout << endl << "Introduce el fichero de la tienda (por defecto tienda abierta) >> ";
                                 cin.getline(ficheroTienda, sizeof(Cadena));
 
@@ -573,7 +575,6 @@ int main()
 
                                 almacen.InsertarEnvios(pedido);
 
-
                                 break;
 
                             case 3:
@@ -581,9 +582,10 @@ int main()
                                 cout << endl << "Introduce el código del producto >> ";
                                 cin >> codigoProducto;
 
-                                if(almacen.BuscarProducto(codigoProducto) == -1)
-                                    cerr << endl << "El producto solicitado no existe en el almacén. ";
-                                    //cerr
+                                if(almacen.BuscarProducto(codigoProducto) == -1){
+                                    cout << endl << "El producto solicitado no existe en el almacén. ";
+                                    break;
+                                }
 
                                 cout << endl << "Introduce la cantidad de producto >> ";
                                 cin >> cantidadProducto;

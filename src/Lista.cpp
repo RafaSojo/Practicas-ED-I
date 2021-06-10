@@ -17,7 +17,7 @@ void Lista::insertar(int i, TPedido pedido){
 
     if (n < MAX){
 
-        for(int x=postabla; x < n; x++)
+        for(int x=n; x >= postabla; x--)
             elementos[x+1] = elementos[x];
 
         elementos[postabla] = pedido;

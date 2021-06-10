@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1623184355 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\talmacen.cpp
+1623259204 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\talmacen.cpp
 	<iostream>
 	"TAlmacen.h"
 	"TTipos.h"
@@ -22,7 +22,7 @@
 1621094120 c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\include\ttienda.h
 	"TTipos.h"
 
-1623185441 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\main.cpp
+1623196652 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\main.cpp
 	<iostream>
 	"TAlmacen.h"
 	"TTipos.h"
@@ -48,7 +48,7 @@
 1623113534 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\cola.cpp
 	"Cola.h"
 
-1623165226 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\lista.cpp
+1623195324 source:c:\users\rafael sojo\google drive\formación\universidad\onedrive - universidad de huelva\estructura de datos i\prácticas\práctica 2\src\lista.cpp
 	"Lista.h"
 	"TTipos.h"
 

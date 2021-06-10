@@ -172,7 +172,7 @@ bool TTienda::AnadirEstante(TEstante pEstante){
         for(int i=0;i<NEstan;i++)
             estanteriaAux[i] = Estantes[i];
 
-        delete Estantes;
+        delete [] Estantes;
 
         Estantes = estanteriaAux;
 
@@ -206,7 +206,7 @@ bool TTienda::GuardarTienda(){
 
 bool TTienda::CerrarTienda(){
 
-    delete Estantes;
+    delete [] Estantes;
     GuardarTienda();
     NEstan = -1;
     return true;
@@ -260,6 +260,8 @@ bool TTienda::CrearTienda(Cadena pNombTienda, Cadena pDirTienda, Cadena pNomFich
 
     NEstan = 0;
     Tamano = 4;
+
+    delete [] Estantes;
 
     Estantes = new TEstante[Tamano];
 

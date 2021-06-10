@@ -23,7 +23,7 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche){
     if(EstaAbierto())
         return false;
 
-    FicheProductos.open(pNomFiche, ios::in|ios::out|ios::binary);
+    FicheProductos.open(pNomFiche, ios::in|ios::binary);
 
     /* actualizar datos clase*/
     FicheProductos.read((char*)&NProduc, sizeof(NProduc));
@@ -36,11 +36,11 @@ bool TAlmacen::AbrirAlmacen(Cadena pNomFiche){
 bool TAlmacen::CerrarAlmacen(){
 
     // vaciar lista y cola
-    for(int i=0; i < Envios.longitud(); i++)
+    /*for(int i=0; i < Envios.longitud(); i++)
         Envios.eliminar(i);
 
     for(int i=0; i < Pedidos.longitud(); i++)
-        Pedidos.desencolar();
+        Pedidos.desencolar();*/
 
      FicheProductos.close();
      return FicheProductos.is_open();
@@ -245,9 +245,6 @@ void TAlmacen::AnadirPedido (TPedido p){
  //Si el producto comprado excede de la cantidad pendiente de servir en los pedidos, la cantidad
  //sobrante, entra en el Almacén.
  bool TAlmacen::AtenderPedidos(Cadena CodProd, int cantidadcomprada){
-    //to-do
-
-    //Cola colaNueva;
 
     TPedido pedidoAux;
     TPedido envioAux;
@@ -260,8 +257,6 @@ void TAlmacen::AnadirPedido (TPedido p){
         pedidoAux = Pedidos.primero();
         // comprobamos el código de producto
         if(strcmp(pedidoAux.CodProd, CodProd) == 0){
-
-            //cantidadEnvio = cantidadcomprada - pedidoAux.CantidadPed;
 
             if(cantidadcomprada - pedidoAux.CantidadPed >= 0){
                 // creamos pedido y restamos cantidad al total
@@ -289,22 +284,16 @@ void TAlmacen::AnadirPedido (TPedido p){
 
                     pedidoAux.CantidadPed -= cantidadEnvio;
 
-                    //colaNueva.encolar(pedidoAux);
                     Pedidos.encolar(pedidoAux);
 
                 }else{
                     // No se puede crear envio
-                    //colaNueva.encolar(pedidoAux);
                     Pedidos.encolar(pedidoAux);
                 }
-
             }
 
         }else{
-
-            //colaNueva.encolar(pedidoAux);
             Pedidos.encolar(pedidoAux);
-
         }
 
         Pedidos.desencolar();
@@ -327,6 +316,11 @@ void TAlmacen::AnadirPedido (TPedido p){
 // Muestra el contenido completo, con todos los datos de los productos leídos del almacén, de la cola
 // si CodProd es '' o muestra los pedidos del Codprod pasado con todos sus datos del almacén.
 void TAlmacen::ListarPedidosCompleto(Cadena CodProd){
+
+    if(Pedidos.esVacia()){
+        cout << endl << "La cola de pedidos está vacía.";
+        return;
+    }
 
     int longitud = Pedidos.longitud();
     TPedido pedido;
@@ -401,8 +395,8 @@ bool TAlmacen::InsertarEnvios(TPedido p){
 
     // Calcular posición de insertar
     for(int i=0; i < Envios.longitud(); i++){
-        pedidoAux = Envios.observar(i + 1);
-        if(strcmp(pedidoAux.Nomtienda, p.Nomtienda) == 0)
+        pedidoAux = Envios.observar(i);
+        if(strcmp(pedidoAux.Nomtienda, p.Nomtienda) < 0)
             posicion = i;
     }
 
