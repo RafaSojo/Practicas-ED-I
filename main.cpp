@@ -101,6 +101,7 @@ void mostrarCabeceraEnvios(){
     cout << endl << "4.- Listar todos los envíos.";
     cout << endl << "5.- Listar los envíos a una tienda.";
     cout << endl << "6.- Guardar envíos a fichero.";
+    cout << endl << "7.- *Mostrar envíos agrupados por tienda.";
     cout << endl << "0.- Salir";
     cout << endl << "> ";
 
@@ -447,7 +448,7 @@ int main()
                                 cout << endl << "Introduce la cantidad de producto >> ";
                                 cin >> pedido.CantidadPed;
 
-                                cout << endl << "Introduce el fichero de la tienda (por defecto tienda abierta) >> ";
+                                cout << endl << "Introduce el fichero de la tienda (por defecto todos) >> ";
                                 cin.getline(ficheroTienda, sizeof(Cadena));
 
                                 if(strcmp(ficheroTienda, "") == 0)
@@ -641,6 +642,11 @@ int main()
                                 cin.getline(nombreLista, sizeof(Cadena));
 
                                 almacen.SalvarListaEnvios(nombreLista);
+                                break;
+
+                            case 7:
+                                /* Listar envios agrupados por tienda */
+                                almacen.ListarListaEnviosTiendas();
                                 break;
 
                             case 0:

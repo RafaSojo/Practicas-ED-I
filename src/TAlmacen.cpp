@@ -438,7 +438,7 @@ void TAlmacen::ListarListaEnvios(Cadena Nomtienda){
 
     TPedido pedido;
 
-    cout << endl << "Lista de envios: ";
+    cout << endl << endl << "Lista de envios ("<< Nomtienda << "): ";
 
     for(int i=0; i < Envios.longitud(); i++){
         pedido = Envios.observar(i);
@@ -520,10 +520,57 @@ bool TAlmacen::RefundirPedidos(Cadena tiendaFundida1, Cadena tiendaFundida2){
         Pedidos.encolar(pedido);
     }
 
-
     return true;
 
 }
+
+
+bool TAlmacen::ListarListaEnviosTiendas(){
+
+    Cola colaAux; // Lo mejor sería con una cola que sólo almacene Cadena pero así funcionaría
+    TPedido pedidoColaAux;
+    TPedido pedidoEnvios;
+
+    bool estaEnCola;
+
+    int x;
+
+    // Obtenemos lista de tiendas
+    for(int i=0;i < Envios.longitud(); i++){
+
+        pedidoEnvios = Envios.observar(i);
+
+        x = 0;
+        estaEnCola = false;
+
+        while(!estaEnCola && x < colaAux.longitud()){
+            pedidoColaAux = colaAux.primero();
+
+            if(strcmp(pedidoEnvios.Nomtienda, pedidoColaAux.Nomtienda) == 0)
+                estaEnCola = true;
+
+            x++;
+
+            colaAux.desencolar();
+            colaAux.encolar(pedidoColaAux);
+        }
+
+        if(!estaEnCola)
+            colaAux.encolar(pedidoEnvios);
+
+    }
+
+
+    // Llamamos a ListarListaEnvios y como parámetro cada tienda
+    while(!colaAux.esVacia()){
+        pedidoColaAux = colaAux.primero();
+        ListarListaEnvios(pedidoColaAux.Nomtienda);
+        colaAux.desencolar();
+    }
+
+    return true;
+}
+
 
 
 

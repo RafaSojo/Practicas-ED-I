@@ -113,6 +113,9 @@ public:
     // Modificación 1: método para refundir los pedidos
     bool RefundirPedidos(Cadena tiendaFundida1, Cadena tiendaFundida2);
 
+    // Modificacion 2: listar envios por tienda
+    bool ListarListaEnviosTiendas();
+
 
 
 };
