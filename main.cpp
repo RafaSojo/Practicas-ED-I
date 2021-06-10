@@ -85,6 +85,7 @@ void mostrarCabeceraPedidos(){
     cout << endl << "6.- Listar todas las cantidades pendientes.";
     cout << endl << "7.- Lista cantidades pendientes de un producto.";
     cout << endl << "8.- Guardar pedidos a fichero.";
+    cout << endl << "9.- *Refundir pedidos.";
     cout << endl << "0.- Salir";
     cout << endl << "> ";
 
@@ -158,6 +159,9 @@ int main()
     int opcion_menu;
     int opcion_submenu;
     int opcion_subsubmenu;
+
+    Cadena tiendaFundida1;
+    Cadena tiendaFundida2;
 
     do
     {
@@ -519,6 +523,23 @@ int main()
                                 almacen.SalvarColaPedidos(nombrePedidos);
 
                                 break;
+
+                            case 9:
+                                /* Refundir pedidos */
+                                cin.ignore();
+
+                                cout << endl << "Introduce el fichero de la tienda origen (la que compra) >> ";
+                                cin.getline(tiendaFundida1, sizeof(Cadena));
+
+                                cout << endl << "Introduce el fichero de la tienda destino (la que es comprada) >> ";
+                                cin.getline(tiendaFundida2, sizeof(Cadena));
+
+                                if(almacen.RefundirPedidos(tiendaFundida1, tiendaFundida2))
+                                    cout << endl << "Tiendas fusionadas correctamente";
+                                else
+                                    cout << endl << "Ocurrió un error al fusionar las tiendas";
+
+
 
                             case 0:
                                 break;

@@ -110,6 +110,10 @@ public:
     bool SalvarListaEnvios(Cadena Nomf);
 
 
+    // Modificación 1: método para refundir los pedidos
+    bool RefundirPedidos(Cadena tiendaFundida1, Cadena tiendaFundida2);
+
+
 
 };
 #endif // TALMACEN_H

@@ -112,26 +112,26 @@ TProducto TAlmacen::ObtenerProducto(int pPos){
  }
 
 
- //Dado un producto, lo busca en el fichero y si no lo encuentra lo añade al final del fichero.
+//Dado un producto, lo busca en el fichero y si no lo encuentra lo añade al final del fichero.
 //Devuelve true si se ha añadido el producto.
-    bool TAlmacen::AnadirProducto(TProducto pProduc){
+bool TAlmacen::AnadirProducto(TProducto pProduc){
 
-    if(BuscarProducto(pProduc.CodProd) != -1)
-        return false;
+if(BuscarProducto(pProduc.CodProd) != -1)
+    return false;
 
-    // Añadimos al fichero el producto
-    int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(TProducto) * NProduc) ;
-    FicheProductos.seekp(offset, ios::beg);
-    FicheProductos.write((char*) &pProduc, sizeof(TProducto));
+// Añadimos al fichero el producto
+int offset = sizeof(NProduc) + sizeof(Nombre) + sizeof(Direccion) + (sizeof(TProducto) * NProduc) ;
+FicheProductos.seekp(offset, ios::beg);
+FicheProductos.write((char*) &pProduc, sizeof(TProducto));
 
-    // Actualizo número de productos
-    NProduc++;
-    FicheProductos.seekp(0, ios::beg);
-    FicheProductos.write((char*)&NProduc, sizeof(NProduc));
+// Actualizo número de productos
+NProduc++;
+FicheProductos.seekp(0, ios::beg);
+FicheProductos.write((char*)&NProduc, sizeof(NProduc));
 
 
-    return true;
-    }
+return true;
+}
 
 
 int TAlmacen::BuscarProducto(Cadena codigoProducto){
@@ -489,7 +489,7 @@ bool TAlmacen::SalvarListaEnvios(Cadena Nomf){
     TPedido pedido;
 
     fstream ficheroPedidos;
-    ficheroPedidos.open(Nomf, ios::in|ios::out|ios::binary);
+    ficheroPedidos.open(Nomf, ios::out|ios::binary);
 
     ficheroPedidos.seekp(0, ios::beg);
 
@@ -502,6 +502,28 @@ bool TAlmacen::SalvarListaEnvios(Cadena Nomf){
 
 }
 
+
+
+bool TAlmacen::RefundirPedidos(Cadena tiendaFundida1, Cadena tiendaFundida2){
+
+    int longitud = Pedidos.longitud();
+    TPedido pedido;
+
+    for(int i=0; i < longitud; i++){
+        pedido = Pedidos.primero();
+
+        if(strcmp(pedido.Nomtienda, tiendaFundida2) == 0)
+            strcpy(pedido.Nomtienda, tiendaFundida1);
+
+
+        Pedidos.desencolar();
+        Pedidos.encolar(pedido);
+    }
+
+
+    return true;
+
+}
 
 
 
